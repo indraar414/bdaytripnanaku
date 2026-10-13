@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071426">
+<title>Birthday Trip — Nanaku 🤍</title>
+
+<style>
+:root {
+  --bg: #06101f;
+  --card: rgba(16,34,58,.88);
+  --line: rgba(255,255,255,.13);
+  --text: #f4f6ff;
+  --muted: #aab9d0;
+  --pink: #f4bfd6;
+  --blue: #9ccaff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(ellipse at 15% 10%, #18365b, transparent 42%),
+    radial-gradient(ellipse at 85% 75%, #241c47, transparent 42%),
+    var(--bg);
+  overflow-x: hidden;
+}
+
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+
+#stars {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  width: min(100% - 28px, 650px);
+  margin: auto;
+  padding: 30px 0 45px;
+}
+
+.topline {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-bottom: 22px;
+}
+
+.logo { color: var(--pink); }
+
+.progress {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.progress span {
+  flex: 1;
+  height: 3px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.13);
+}
+
+.progress span.active { background: var(--pink); }
+
+.panel { display: none; animation: appear .4s ease; }
+.panel.active { display: block; }
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  padding: clamp(21px, 5vw, 35px);
+  border: 1px solid var(--line);
+  border-radius: 25px;
+  background: var(--card);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 20px 70px rgba(0,0,0,.23);
+}
+
+.center { text-align: center; }
+
+.eyebrow {
+  color: var(--pink);
+  font-size: 10px;
+  letter-spacing: 3px;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: clamp(36px, 8vw, 54px);
+  line-height: 1.1;
+  letter-spacing: -1.8px;
+  margin: 18px 0;
+}
+
+h2 {
+  font-size: clamp(26px, 6vw, 35px);
+  letter-spacing: -.8px;
+  line-height: 1.2;
+  margin: 13px 0;
+}
+
+h3 { margin: 0 0 8px; font-size: 15px; }
+
+p {
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 14px;
+}
+
+.hero-icon {
+  width: 94px;
+  height: 94px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(244,191,214,.3);
+  border-radius: 50%;
+  background: rgba(244,191,214,.07);
+  font-size: 42px;
+  margin: 27px auto;
+  box-shadow: 0 0 55px rgba(244,191,214,.08);
+}
+
+.date-pill {
+  display: inline-block;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  color: #e9d9f4;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 15px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  color: #172137;
+  background: linear-gradient(120deg, #f5c6db, #c9dcff);
+  font-weight: 750;
+  font-size: 12px;
+  transition: transform .2s;
+}
+
+.btn:hover { transform: translateY(-2px); }
+
+.btn.secondary {
+  color: var(--text);
+  background: rgba(255,255,255,.04);
+  border-color: var(--line);
+}
+
+.btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 23px;
+}
+
+.small-note {
+  font-size: 11px;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.section-head { margin-bottom: 20px; }
+.section-head p { margin-bottom: 0; }
+
+.city-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 22px 0;
+}
+
+.city-option {
+  position: relative;
+  text-align: left;
+  padding: 17px 14px;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  color: var(--text);
+  background: rgba(255,255,255,.035);
+}
+
+.city-option.selected {
+  border-color: var(--pink);
+  background: rgba(244,191,214,.1);
+}
+
+.city-option .emoji {
+  display: block;
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.city-option strong { display: block; margin-bottom: 5px; }
+
+.city-option small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.checkmark {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  color: var(--pink);
+  opacity: 0;
+}
+
+.city-option.selected .checkmark { opacity: 1; }
+
+.dest-list {
+  display: grid;
+  gap: 11px;
+  margin: 20px 0;
+}
+
+.dest-card {
+  display: flex;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: rgba(255,255,255,.035);
+}
+
+.dest-card.selected {
+  border-color: var(--pink);
+  background: rgba(244,191,214,.08);
+}
+
+.dest-card input {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+  accent-color: #f4bfd6;
+  margin-top: 3px;
+}
+
+.dest-content { flex: 1; min-width: 0; }
+
+.dest-content p {
+  margin: 5px 0 9px;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.tag {
+  display: inline-block;
+  padding: 5px 8px;
+  border-radius: 7px;
+  color: #d9e7ff;
+  background: rgba(156,202,255,.09);
+  font-size: 10px;
+}
+
+.map-link {
+  display: inline-block;
+  margin-top: 9px;
+  color: var(--blue);
+  text-decoration: none;
+  font-size: 11px;
+}
+
+.map-link:hover { text-decoration: underline; }
+
+.selection-count {
+  color: var(--pink);
+  font-size: 12px;
+  margin: 12px 0;
+}
+
+.custom-destination {
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px dashed rgba(244,191,214,.4);
+  border-radius: 18px;
+  background: rgba(244,191,214,.045);
+}
+
+.custom-destination h3 { line-height: 1.5; }
+
+.custom-destination p {
+  font-size: 12px;
+  margin: 7px 0 14px;
+}
+
+.custom-destination input,
+.custom-destination textarea {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 13px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(4,13,27,.65);
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+}
+
+.custom-destination input:focus,
+.custom-destination textarea:focus {
+  border-color: var(--pink);
+}
+
+.custom-destination textarea { resize: vertical; }
+
+.custom-destination input::placeholder,
+.custom-destination textarea::placeholder {
+  color: #8998b0;
+}
+
+.summary-row {
+  padding: 15px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.summary-row:last-child { border-bottom: 0; }
+
+.summary-label {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  margin-bottom: 7px;
+}
+
+.summary-value { font-size: 14px; line-height: 1.8; }
+
+.destination-chip {
+  display: inline-block;
+  margin: 3px 4px 3px 0;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.letter {
+  margin-top: 22px;
+  padding: 19px;
+  border-radius: 17px;
+  background: rgba(244,191,214,.06);
+  border: 1px solid rgba(244,191,214,.14);
+}
+
+.letter p { color: #e1e6f3; }
+.letter .signature { color: var(--pink); margin-bottom: 0; }
+
+.toast {
+  display: none;
+  margin-top: 12px;
+  color: var(--pink);
+  font-size: 12px;
+}
+
+.footer {
+  text-align: center;
+  color: #71819b;
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin-top: 25px;
+}
+
+@media (max-width: 380px) {
+  .city-grid, .btn-row { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+
+<main class="app">
+  <div class="topline">
+    <span class="logo">✦ FOR NANAKU</span>
+    <span>17 · 10 · 2026</span>
+  </div>
+
+  <div class="progress" id="progress">
+    <span class="active"></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- HALAMAN 1 -->
+  <section class="panel active" id="page1">
+    <div class="card center">
+      <div class="eyebrow">A LITTLE SOMETHING FOR U MY BELOVED GIRL</div>
+      <div class="hero-icon">🌙</div>
+      <h1>Hai,<br>Nanaku.</h1>
+      <p>
+        Let's continue talking about the birthday trip you answered about earlier.
+      </p>
+      <div class="date-pill">♡ Birthday Trip · 17 Oktober 2026</div>
+      <div style="margin-top:27px">
+        <button class="btn" onclick="goTo(2)">
+          OPEN IT SLOWLY
+        </button>
+      </div>
+      <p class="small-note">Made especially for you Nanaku, not for anyone else.</p>
+    </div>
+  </section>
+
+  <!-- HALAMAN 2: KOTA -->
+  <section class="panel" id="page2">
+    <div class="card">
+      <div class="section-head">
+        <div class="eyebrow">01 — DESTINATION</div>
+        <h2>Kita mau ke mana,<br>Sayang?</h2>
+        <p>Pilih kota yang kamu mau.</p>
+      </div>
+
+      <div class="city-grid">
+        <button class="city-option" id="citySumedang"
+                onclick="chooseCity('Sumedang')">
+          <span class="checkmark">✓</span>
+          <span class="emoji">🌲</span>
+          <strong>SUMEDANG</strong>
+          <small>Kenapa Sumedang?</small>
+        </button>
+        <button class="city-option" id="cityBandung"
+                onclick="chooseCity('Bandung')">
+          <span class="checkmark">✓</span>
+          <span class="emoji">🏕️</span>
+          <strong>BANDUNG</strong>
+          <small>Kenapa Bandung?</small>
+        </button>
+      </div>
+
+      <div id="cityError" class="toast">PILIH DULU TAYANG😋🤍</div>
+
+      <div class="btn-row">
+        <button class="btn secondary" onclick="goTo(1)">← KEMBALI</button>
+        <button class="btn" onclick="continueToDestinations()">PILIH TEMPAT →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- HALAMAN 3: DESTINASI + INPUT SENDIRI -->
+  <section class="panel" id="page3">
+    <div class="card">
+      <div class="section-head">
+        <div class="eyebrow">02 — YOUR PICKS</div>
+        <h2>Pilih tempat<br>Yang kamu mau.</h2>
+        <p id="destinationIntro">Centang tempat yang paling pengin kamu datangi.</p>
+        <div class="selection-count" id="selectionCount">0 tempat dipilih</div>
+      </div>
+
+      <div class="dest-list" id="destinationList"></div>
+
+      <div class="custom-destination">
+        <h3>💌 PUNYA TEMPATLAIN YANG PENGEN KAMU DATENGIN?</h3>
+        <p>
+          Kalau tempat yang kamu mau belum ada,
+          tulis aja di sini. Aku pengen tahu tempat yang
+          mau kamu datengin bareng aku😋.
+        </p>
+
+        <input
+          type="text"
+          id="customPlace"
+          placeholder="Nama tempat yang pengin kamu datangi..."
+          maxlength="150"
+          autocomplete="off"
+        >
+
+        <textarea
+          id="customReason"
+          placeholder="Kenapa pengin ke sana? (opsional)"
+          maxlength="300"
+          rows="3"
+        ></textarea>
+
+        <p style="font-size:11px;margin-bottom:0">
+          Tempat yang kamu tulis sendiri juga bakal masuk ke rangkuman. 🤍
+        </p>
+      </div>
+
+      <p class="small-note">
+        Kamu boleh pilih beberapa tempat sekaligus, Sayang.
+      </p>
+
+      <div id="destError" class="toast">
+        Pilih minimal satu tempat atau tulis destinasi impian kamu ya.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn secondary" onclick="goTo(2)">← GANTI KOTA</button>
+        <button class="btn" onclick="showSummary()">LIHAT PILIHANKU →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- HALAMAN 4: RANGKUMAN -->
+  <section class="panel" id="page4">
+    <div class="card">
+      <div class="center">
+        <div class="eyebrow">03 — OUR LITTLE ADVENTURE</div>
+        <div class="hero-icon" style="width:76px;height:76px;font-size:32px">💌</div>
+        <h2>Ini pilihan<br>kamu, Nanaku.</h2>
+        <p>Coba cek dulu. Kalau udah cocok, kita simpan rencana ini.</p>
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-label">TANGGAL</div>
+        <div class="summary-value">17 Oktober 2026</div>
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-label">KOTA PILIHAN</div>
+        <div class="summary-value" id="summaryCity">—</div>
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-label">DESTINASI PILIHAN</div>
+        <div class="summary-value" id="summaryDestinations">—</div>
+      </div>
+
+      <div id="summaryMaps" style="margin-top:10px"></div>
+
+      <div class="letter">
+        <p>
+          Aku nggak janji perjalanan kita bakal selalu sempurna.
+          Tapi aku pengin kita punya waktu buat berhenti sebentar
+          dari sibuknya hari-hari, menikmati alam, ketawa bareng,
+          dan bikin cerita yang nanti bisa kita inget lagi.
+        </p>
+        <p>
+          Selamat ulang tahun, Nanaku. Semoga di umur kamu yang baru,
+          banyak hal baik datang ke hidup kamu.
+          Makasih udah jadi bagian dari cerita aku.
+        </p>
+        <p class="signature">
+          With love, dari aku yang mau terus jalan bareng kamu. 🤍
+        </p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn secondary" onclick="goTo(3)">← UBAH PILIHAN</button>
+        <button class="btn" onclick="confirmTrip()">AKU PILIH INI 🤍</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- HALAMAN 5: SELESAI -->
+  <section class="panel" id="page5">
+    <div class="card center">
+      <div class="eyebrow">IT'S A DATE, NANAKU ✦</div>
+      <div class="hero-icon">🫶🏻</div>
+      <h1>Okay,<br>it's our plan!</h1>
+      <p>
+        Sekarang kita punya rencana kecil buat ulang tahun kamu.
+        Tinggal kita obrolin detailnya dan siapin perjalanan kita.
+      </p>
+
+      <div class="letter" style="text-align:left">
+        <div class="summary-label">BIRTHDAY TRIP PLAN</div>
+        <div class="summary-value" id="finalCity"></div>
+        <div id="finalDestinations" style="margin-top:8px"></div>
+        <div id="finalReason"></div>
+        <p style="font-size:12px">📅 17 Oktober 2026</p>
+      </div>
+
+      <button class="btn" style="margin-top:20px" onclick="sharePlan()">
+        BAGIKAN RENCANA INI ↗
+      </button>
+
+      <button class="btn secondary" style="margin-top:10px"
+              onclick="goTo(2)">
+        LIHAT PILIHAN LAGI
+      </button>
+
+      <p class="small-note">
+        Satu perjalanan kecil, semoga jadi kenangan yang besar. ♡
+      </p>
+    </div>
+  </section>
+
+  <div class="footer">MADE WITH LOVE · JUST FOR NANAKU ♡</div>
+</main>
+
+<script>
+/* DESTINASI BAWAAN
+   Nama lokasi bisa kamu ubah kapan saja.
+   Link Maps akan mencari nama lokasi tersebut.
+*/
+const destinations = {
+  Sumedang: [
+    {
+      id: "samalengoh",
+      name: "Samalengoh Camp",
+      type: "Camping & Alam",
+      emoji: "⛺",
+      description: "Pilihan buat menikmati suasana perkemahan dan pemandangan alam.",
+      maps: "Samalengoh Camp Sumedang"
+    },
+    {
+      id: "nangorak",
+      name: "Nangorak Camp",
+      type: "Camping & Perbukitan",
+      emoji: "🌄",
+      description: "Buat cari suasana sejuk, ngobrol lama, dan menikmati waktu berdua.",
+      maps: "Nangorak Camp Sumedang"
+    },
+    {
+      id: "sangiang",
+      name: "Sangiang Bedil",
+      type: "Alam & Pemandangan",
+      emoji: "🌿",
+      description: "Alternatif menikmati pemandangan dan suasana alam.",
+      maps: "Sangiang Bedil"
+    },
+    {
+      id: "curug",
+      name: "Curug di Sumedang",
+      type: "Wisata alam",
+      emoji: "💧",
+      description: "Buat jalan santai sambil menikmati suasana air terjun.",
+      maps: "wisata curug Sumedang"
+    }
+  ],
+
+  Bandung: [
+    {
+      id: "rancaupas",
+      name: "Ranca Upas",
+      type: "Camping & Alam",
+      emoji: "🏕️",
+      description: "Suasana camping di kawasan Ciwidey dengan udara sejuk.",
+      maps: "Ranca Upas Ciwidey Bandung"
+    },
+    {
+      id: "gunungputri",
+      name: "Gunung Putri Lembang",
+      type: "Camping & Perbukitan",
+      emoji: "🌙",
+      description: "Menikmati udara dingin dan pemandangan dari kawasan perbukitan.",
+      maps: "Gunung Putri Lembang camping"
+    },
+    {
+      id: "orchid",
+      name: "Orchid Forest Cikole",
+      type: "Hutan & Jalan Santai",
+      emoji: "🌲",
+      description: "Jalan santai di kawasan hutan pinus dan menikmati alam.",
+      maps: "Orchid Forest Cikole Lembang"
+    },
+    {
+      id: "cikole",
+      name: "Camping Ground Cikole",
+      type: "Camping & Hutan Pinus",
+      emoji: "🔥",
+      description: "Alternatif buat menghabiskan waktu di tengah hutan pinus.",
+      maps: "camping ground Cikole Lembang Bandung"
+    }
+  ]
+};
+
+let selectedCity = "";
+let selectedDestinations = [];
+
+const $ = id => document.getElementById(id);
+
+function goTo(number) {
+  document.querySelectorAll(".panel").forEach(panel => {
+    panel.classList.remove("active");
+  });
+
+  $("page" + number).classList.add("active");
+
+  document.querySelectorAll("#progress span").forEach((bar, index) => {
+    bar.classList.toggle("active", index < number);
+  });
+
+  ["cityError", "destError"].forEach(id => {
+    $(id).style.display = "none";
+  });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function chooseCity(city) {
+  selectedCity = city;
+
+  $("citySumedang").classList.toggle("selected", city === "Sumedang");
+  $("cityBandung").classList.toggle("selected", city === "Bandung");
+  $("cityError").style.display = "none";
+}
+
+function continueToDestinations() {
+  if (!selectedCity) {
+    $("cityError").style.display = "block";
+    return;
+  }
+
+  const availableIds = destinations[selectedCity].map(place => place.id);
+
+  selectedDestinations = selectedDestinations.filter(id =>
+    availableIds.includes(id)
+  );
+
+  renderDestinations();
+  goTo(3);
+}
+
+function renderDestinations() {
+  const list = $("destinationList");
+  list.innerHTML = "";
+
+  $("destinationIntro").textContent =
+    "Destinasi " + selectedCity +
+    " yang bisa kamu pilih. Kamu juga bisa nulis tempat sendiri di bawah.";
+
+  destinations[selectedCity].forEach(place => {
+    const card = document.createElement("label");
+    card.className = "dest-card";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = selectedDestinations.includes(place.id);
+    checkbox.setAttribute("aria-label", "Pilih " + place.name);
+
+    const content = document.createElement("div");
+    content.className = "dest-content";
+
+    const title = document.createElement("h3");
+    title.textContent = place.emoji + " " + place.name;
+
+    const desc = document.createElement("p");
+    desc.textContent = place.description;
+
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = place.type;
+
+    const map = document.createElement("a");
+    map.className = "map-link";
+    map.href = makeMapUrl(place.maps);
+    map.target = "_blank";
+    map.rel = "noopener noreferrer";
+    map.textContent = "📍 Lihat di Google Maps";
+
+    content.append(title, desc, tag, document.createElement("br"), map);
+    card.append(checkbox, content);
+    list.appendChild(card);
+
+    card.classList.toggle("selected", checkbox.checked);
+
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) {
+        if (!selectedDestinations.includes(place.id)) {
+          selectedDestinations.push(place.id);
+        }
+      } else {
+        selectedDestinations = selectedDestinations.filter(
+          id => id !== place.id
+        );
+      }
+
+      card.classList.toggle("selected", checkbox.checked);
+      updateSelectionCount();
+    });
+  });
+
+  updateSelectionCount();
+}
+
+function updateSelectionCount() {
+  const custom = $("customPlace").value.trim();
+  const count = selectedDestinations.length + (custom ? 1 : 0);
+
+  $("selectionCount").textContent =
+    count + (count === 1 ? " pilihan" : " pilihan");
+}
+
+$("customPlace").addEventListener("input", updateSelectionCount);
+
+function getSelectedPlaces() {
+  if (!selectedCity) return [];
+
+  return destinations[selectedCity].filter(place =>
+    selectedDestinations.includes(place.id)
+  );
+}
+
+function getCustomPlace() {
+  return $("customPlace").value.trim();
+}
+
+function getCustomReason() {
+  return $("customReason").value.trim();
+}
+
+function getAllChoices() {
+  const choices = getSelectedPlaces();
+  const custom = getCustomPlace();
+
+  if (custom) {
+    choices.push({
+      id: "custom",
+      name: custom,
+      type: "Pilihan khusus Nanaku",
+      emoji: "💌",
+      description: getCustomReason(),
+      maps: custom + " " + selectedCity,
+      custom: true
+    });
+  }
+
+  return choices;
+}
+
+function makeMapUrl(query) {
+  return "https://www.google.com/maps/search/?api=1&query=" +
+    encodeURIComponent(query);
+}
+
+function showSummary() {
+  if (selectedDestinations.length === 0 && !getCustomPlace()) {
+    $("destError").style.display = "block";
+    return;
+  }
+
+  $("destError").style.display = "none";
+  $("summaryCity").textContent = selectedCity;
+
+  const choices = getAllChoices();
+  const summary = $("summaryDestinations");
+  const maps = $("summaryMaps");
+
+  summary.innerHTML = "";
+  maps.innerHTML = "";
+
+  choices.forEach(place => {
+    const chip = document.createElement("span");
+    chip.className = "destination-chip";
+    chip.textContent = place.emoji + " " + place.name;
+    summary.appendChild(chip);
+
+    if (place.custom && place.description) {
+      const reason = document.createElement("p");
+      reason.style.fontSize = "12px";
+      reason.textContent = "Alasan Nanaku: " + place.description;
+      summary.appendChild(reason);
+    }
+
+    const link = document.createElement("a");
+    link.className = "map-link";
+    link.style.display = "block";
+    link.href = makeMapUrl(place.maps);
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = place.custom
+      ? "📍 Cari tempat ini di Google Maps"
+      : "📍 Buka Maps — " + place.name;
+
+    maps.appendChild(link);
+  });
+
+  goTo(4);
+}
+
+function confirmTrip() {
+  const choices = getAllChoices();
+
+  if (!selectedCity || choices.length === 0) {
+    $("destError").style.display = "block";
+    goTo(3);
+    return;
+  }
+
+  $("finalCity").textContent = "📍 " + selectedCity;
+
+  const finalDestinations = $("finalDestinations");
+  finalDestinations.innerHTML = "";
+
+  choices.forEach(place => {
+    const chip = document.createElement("span");
+    chip.className = "destination-chip";
+    chip.textContent = place.emoji + " " + place.name;
+    finalDestinations.appendChild(chip);
+  });
+
+  const reason = $("finalReason");
+  reason.innerHTML = "";
+
+  if (getCustomReason()) {
+    const p = document.createElement("p");
+    p.style.fontSize = "12px";
+    p.textContent = "Alasan Nanaku: " + getCustomReason();
+    reason.appendChild(p);
+  }
+
+  goTo(5);
+}
+
+function makeShareMessage() {
+  const choices = getAllChoices();
+
+  return "Birthday Trip Nanaku 🤍\n" +
+    "Tanggal: 17 Oktober 2026\n" +
+    "Kota: " + selectedCity + "\n\n" +
+    "Destinasi pilihan:\n" +
+    choices.map((place, index) => {
+      let line = (index + 1) + ". " + place.name;
+
+      if (place.custom && place.description) {
+        line += "\n   Alasan: " + place.description;
+      }
+
+      line += "\n   Google Maps: " + makeMapUrl(place.maps);
+      return line;
+    }).join("\n\n") +
+    "\n\nSatu perjalanan kecil, semoga jadi kenangan yang besar. ♡";
+}
+
+async function sharePlan() {
+  const message = makeShareMessage();
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Birthday Trip Nanaku 🤍",
+        text: message
+      });
+      return;
+    } catch (error) {
+      if (error.name === "AbortError") return;
+    }
+  }
+
+  try {
+    await navigator.clipboard.writeText(message);
+    alert("Rencana berhasil disalin. Tinggal kirim lewat WhatsApp! 🤍");
+  } catch (error) {
+    window.prompt("Salin rencana birthday trip ini:", message);
+  }
+}
+
+/* EFEK BINTANG */
+(function createStars() {
+  const canvas = $("stars");
+  const ctx = canvas.getContext("2d");
+  let stars = [];
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    stars = Array.from({ length: 95 }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: Math.random() * 1.3 + .3,
+      alpha: Math.random() * .7 + .2,
+      speed: Math.random() * .008 + .002
+    }));
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+    stars.forEach(star => {
+      star.alpha += star.speed;
+
+      if (star.alpha > .9 || star.alpha < .2) {
+        star.speed *= -1;
+      }
+
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255,255,255," +
+        Math.max(.1, star.alpha) + ")";
+      ctx.fill();
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  draw();
+  window.addEventListener("resize", resize);
+})();
+</script>
+</body>
+</html>
